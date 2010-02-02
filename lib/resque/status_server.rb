@@ -11,6 +11,13 @@ module Resque
         @statuses = Resque::Status.statuses
         status_view(:statuses)
       end
+
+      app.get '/statuses.poll' do
+        @statuses = Resque::Status.statuses
+        @polling = true
+        content_type 'text/plain'
+        status_view(:statuses, :layout => false).gsub(/\s{1,}/, ' ')
+      end
       
       app.get '/statuses/:id.js' do
         @status = Resque::Status.get(params[:id])
